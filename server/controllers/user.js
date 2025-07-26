@@ -36,7 +36,7 @@ async function handleLogin(req, res) {
         }
         const {password: _, ...userWithoutPassword} = user.toObject(); //remove password from user object to avoid sending it with jwt
         const uid = setUser(userWithoutPassword);//converting the user object to token and signing it
-        return res.status(200).cookie("uid", uid, { httpOnly: true, secure: process.env.NODE_ENV === "production", maxAge: 30 * 24 * 60 * 60 * 1000 }).json({ message: "Login successful"});
+        return res.status(200).cookie("uid", uid, { httpOnly: true, secure: process.env.NODE_ENV === "production", maxAge: 30 * 24 * 60 * 60 * 1000 }).json({ message: "Logged in successfully", isLoggedIn: true, user: userWithoutPassword});
     } catch (error) {
         console.error("Error in login:", error);
         return res.status(500).json({ message: "Internal server error" });
@@ -64,10 +64,8 @@ async function handleSignup(req, res) {
             return res.status(409).json({ message: "User already exists. Kindly login" });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await User.create({ name, email, password: hashedPassword });
-        const {password: _, ...userWithoutPassword} = newUser.toObject(); //remove password from user object to avoid sending it with jwt
-        const uid = setUser(userWithoutPassword);//converting the user object to token and signing it
-        return res.status(201).cookie("uid", uid, { httpOnly: true, secure: process.env.NODE_ENV === "production", maxAge: 30 * 24 * 60 * 60 * 1000 }).json({ message: "User created successfully" });
+        await User.create({ name, email, password: hashedPassword });
+        return res.status(201).json({ message: "User created successfully Kindly Login" });
     } catch (error) {
         console.error("Error in signup:", error);
         return res.status(500).json({ message: "Internal server error" });

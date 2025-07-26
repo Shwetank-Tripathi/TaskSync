@@ -1,12 +1,12 @@
 // src/pages/Signup.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { useMessage } from "../hooks/useMessage";
 import axios from "../axios";
 
 const Signup = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const { setUser } = useAuth();
+  const { showMessage } = useMessage();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -18,18 +18,12 @@ const Signup = () => {
       });
 
       if (res.status === 201) {
-        const verify = await axios.get("/user/verify", {
-          withCredentials: true,
-        });
-        const data = verify.data;
-        if (data.isLoggedIn) {
-          setUser(data.user);
-          navigate("/rooms");
-        }
+        const data = res.data;
+        navigate("/login");
+        showMessage(data.message, "success");
       }
     } catch (error) {
-      const message = error.response?.data?.message || "Signup failed";
-      alert(message);
+      showMessage(error.response?.data?.message || "Signup failed", "error");
     }
   };
 
