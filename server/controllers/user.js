@@ -36,7 +36,7 @@ async function handleLogin(req, res) {
         }
         const {password: _, ...userWithoutPassword} = user.toObject(); //remove password from user object to avoid sending it with jwt
         const uid = setUser(userWithoutPassword);//converting the user object to token and signing it
-        return res.status(200).cookie("uid", uid, { httpOnly: true, secure: process.env.NODE_ENV === "production", maxAge: 30 * 24 * 60 * 60 * 1000 }).json({ message: "Logged in successfully", isLoggedIn: true, user: userWithoutPassword});
+        return res.status(200).cookie("uid", uid, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", maxAge: 30 * 24 * 60 * 60 * 1000, domain: process.env.NODE_ENV === "production" ? undefined : "localhost" }).json({ message: "Logged in successfully", isLoggedIn: true, user: userWithoutPassword});
     } catch (error) {
         console.error("Error in login:", error);
         return res.status(500).json({ message: "Internal server error" });
