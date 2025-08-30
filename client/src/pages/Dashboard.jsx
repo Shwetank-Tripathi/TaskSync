@@ -24,7 +24,6 @@ const Dashboard = () => {
     const [members, setMembers] = useState([]);
     const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
 
-    // Extract room loading logic into a reusable function
     const loadRooms = async () => {
         try {
             setLoadingRooms(true);
@@ -43,7 +42,6 @@ const Dashboard = () => {
         }
     };
 
-    //1. Fetch all rooms on mount
     useEffect(() => {
         if (user) {
             loadRooms();
@@ -216,7 +214,7 @@ const Dashboard = () => {
         }
     };
 
-    // Leave room (for non-creators) - IMPROVED
+    // Leave room (for non-creators)
     const handleLeaveRoom = async (roomToLeave) => {
         if (!window.confirm(`Are you sure you want to leave "${roomToLeave.name}"?`)) {
             return;
@@ -289,12 +287,12 @@ const Dashboard = () => {
                         </div>
                     ) : (
                         <div className="flex flex-col h-full p-6 gap-6">
-                            {/* Create Task Button - Fixed height */}
+                            {/* Create Task Button */}
                             <div className="flex-shrink-0">
                                 <CreateTaskButton onClick={() => setShowCreateTaskModal(true)} />
                             </div>
                             
-                            {/* Activity Feed - Takes remaining space */}
+                            {/* Activity Feed */}
                             <div className="flex-1 min-h-0">
                                 <LogsTable logs={logs} />
                             </div>
@@ -302,7 +300,7 @@ const Dashboard = () => {
                     )}
                 </aside>
 
-                {/* Main Content - No scrollbar, let columns handle their own scrolling */}
+                {/* Main Content */}
                 <main className="flex-1 flex flex-col min-h-0">
                     {!roomId ? (
                         <div className="flex-1 p-6 overflow-y-auto">
@@ -404,7 +402,7 @@ const Dashboard = () => {
                         </div>
                     ) : (
                         <div className="flex flex-col flex-1 p-6 min-h-0">
-                            {/* Back button - Fixed */}
+                            {/* Back button */}
                             <div className="flex-shrink-0 mb-6">
                                 <button 
                                     onClick={handleBackToRooms}
@@ -417,7 +415,7 @@ const Dashboard = () => {
                                 </button>
                             </div>
                             
-                            {/* Kanban Board - Takes remaining space */}
+                            {/* Kanban Board */}
                             <div className="flex-1 min-h-0">
                                 <KanbanBoard
                                     tasks={tasks}

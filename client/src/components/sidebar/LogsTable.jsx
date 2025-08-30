@@ -1,14 +1,12 @@
 const LogsTable = ({ logs }) => {
   console.log("📋 LogsTable received logs:", logs);
 
-  // Map backend action to user-friendly label
   const getActionLabel = (log) => {
     if (!log || typeof log.action !== 'string' || !log.action.trim()) {
       console.warn("⚠️ Invalid log in getActionLabel:", log);
       return 'Unknown';
     }
     
-    // Handle different action types
     switch (log.action) {
       case 'create':
         return 'Add';

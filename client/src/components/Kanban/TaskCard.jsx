@@ -4,7 +4,6 @@ import AlertModal from "../modals/AlertModal";
 
 const priorities = ["low", "medium", "high"];
 
-// Conflict Modal with better styling
 const ConflictModal = ({ serverTask, clientTask, onMerge, onOverwrite, onCancel }) => {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -70,7 +69,6 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
   const [showConflictModal, setShowConflictModal] = useState(false);
   const [conflictData, setConflictData] = useState(null);
   
-  // Alert Modal State
   const [alertModal, setAlertModal] = useState({
     isOpen: false,
     title: "",
@@ -139,9 +137,7 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
   };
 
   const handleConflictMerge = () => {
-    // Use the server version and close edit mode
     setShowConflictModal(false);
-    // Update the task with server version
     onTaskUpdated(task._id, conflictData.serverTask);
     cancelEdit();
     setConflictData(null);
@@ -195,7 +191,6 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
     
     console.log("🔄 Starting edit:", { field: editField, value: editValue, taskId: task._id });
     
-    // OPTIONAL: Optimistic update for instant feedback
     const optimisticChanges = { 
       [editField]: editField === "assignedUser" ? (editValue || null) : editValue 
     };
@@ -220,12 +215,10 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
       
       console.log("📥 Server response:", data);
       
-      // Backend now returns 'changes' object directly
       if (data.changes) {
         console.log("✅ Success - Server changes:", data.changes);
         console.log("📝 Server log:", data.log);
         
-        // Update with server response (this includes version and any server-side changes)
         onTaskUpdated(task._id, data.changes, data.log);
         cancelEdit();
         showAlert("Task updated successfully!", "success");
@@ -236,7 +229,6 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
     } catch (error) {
       console.error("❌ Error updating task:", error);
       
-      // Revert optimistic update on error
       const revertChanges = { [editField]: task[editField] };
       onTaskUpdated(task._id, revertChanges, null);
       
@@ -251,7 +243,6 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
   const smartAssign = async () => {
     if (task.assignedUser) return;
     
-    // Find member with fewest active tasks
     const memberTaskCounts = members.map(member => {
       const activeTaskCount = allTasks.filter(t => 
         t.assignedUser?._id === member._id && t.status !== 'done'
@@ -270,7 +261,6 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
     
     console.log("🎯 Smart assigning to:", memberWithFewestTasks.member.name);
     
-    // OPTIONAL: Optimistic update
     const optimisticChanges = { assignedUser: memberWithFewestTasks.member };
     onTaskUpdated(task._id, optimisticChanges, null);
     
@@ -288,7 +278,6 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
       });
       const data = res.data;
       
-      // Backend now returns 'changes' object directly
       if (data.changes) {
         console.log("✅ Smart assign success");
         onTaskUpdated(task._id, data.changes, data.log);
@@ -299,7 +288,6 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
     } catch (error) {
       console.error("❌ Error smart assigning:", error);
       
-      // Revert optimistic update
       onTaskUpdated(task._id, { assignedUser: task.assignedUser }, null);
       
       const message = error.response?.data?.message || "Failed to assign task";
@@ -333,7 +321,6 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
       draggable
       onDragStart={e => e.dataTransfer.setData("task-id", task._id)}
     >
-      {/* Task Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
           {editField === "title" ? (
@@ -419,7 +406,6 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
 
       {/* Task Meta Information */}
       <div className="space-y-2">
-        {/* Assignee */}
         <div className="flex items-center justify-between">
           <span className="text-xs text-slate-400">Assigned to:</span>
           {editField === "assignedUser" ? (

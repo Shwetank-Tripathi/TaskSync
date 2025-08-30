@@ -12,7 +12,7 @@ const MessageProvider = ({ children }) => {
         setType(variant || 'info');
         setTimeout(() => {
             setMessage("");
-        }, 5000); // Clear error after 5 seconds
+        }, 5000);
     };
 
     const clearMessage = () => {

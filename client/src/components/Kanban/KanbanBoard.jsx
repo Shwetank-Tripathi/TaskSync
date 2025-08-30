@@ -30,7 +30,6 @@ const KanbanBoard = ({ tasks, roomId, socketId, userId, members, onTaskUpdated, 
 
   return (
     <div className="h-full flex flex-col">
-      {/* Board Header - Fixed */}
       <div className="flex-shrink-0 mb-6">
         <h2 className="text-2xl font-bold text-white mb-2 flex items-center">
           <svg className="w-6 h-6 mr-3 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,7 +40,6 @@ const KanbanBoard = ({ tasks, roomId, socketId, userId, members, onTaskUpdated, 
         <p className="text-slate-400">Manage and track your project tasks</p>
       </div>
       
-      {/* Kanban Columns - Takes remaining space, no horizontal scroll */}
       <div className="flex-1 flex gap-6 min-h-0">
         {columns.map(col => (
           <Column
