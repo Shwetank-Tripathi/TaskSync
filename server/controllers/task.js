@@ -52,7 +52,7 @@ async function handleCreateTask(req, res) {
         });
         const populatedTask = await Task.findById(task._id).populate("assignedUser", "name email _id");
         room.tasks.push(task._id);
-        const log = Log.create({ user: req.user.name, target: task.title, action: "create", timestamp: new Date().toISOString() });
+        const log = await Log.create({ user: req.user.name, target: task.title, action: "create", timestamp: new Date().toISOString() });
         room.logs.push(log._id);
         await room.save();
         req.app.get("io").to(roomId).except(socketId).emit("task:created", {task: populatedTask, log}); //emit to all other clients except the one who made the request
@@ -81,7 +81,7 @@ async function handleDeleteTask(req, res) {
         
         await Task.findByIdAndDelete(id);
         room.tasks.pull(task._id);
-        const log = Log.create({ user: req.user.name, target: task.title, action: "delete", timestamp: new Date().toISOString() });
+        const log = await Log.create({ user: req.user.name, target: task.title, action: "delete", timestamp: new Date().toISOString() });
         room.logs.push(log._id);
         await room.save();
         req.app.get("io").to(roomId).except(socketId).emit("task:deleted", {id: task._id, log});
@@ -147,11 +147,11 @@ async function handleUpdateTask(req, res) {
         update.version = task.version;
 
         const populatedTask = await Task.findById(task._id).populate("assignedUser", "name email _id");
-        const log = Log.create({ user: req.user.name, target: task.title, action: "update", timestamp: new Date().toISOString() });
+        const log = await Log.create({ user: req.user.name, target: task.title, action: "update", timestamp: new Date().toISOString() });
         room.logs.push(log._id);
         await room.save();
-        req.app.get("io").to(roomId).except(socketId).emit("task:updated", {id: task._id, log});
-        return res.status(200).json({ message: "Task updated successfully", id: task._id, log });
+        req.app.get("io").to(roomId).except(socketId).emit("task:updated", {id: task._id, changes: update, log: log});
+        return res.status(200).json({ message: "Task updated successfully", id: task._id, changes: update, log: log });
     } catch (error) {
         console.error("Error updating task:", error);
         return res.status(500).json({ message: "Internal server error" });

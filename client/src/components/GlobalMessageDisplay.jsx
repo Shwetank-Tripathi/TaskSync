@@ -1,20 +1,31 @@
 import { useMessage } from "../hooks/useMessage";
 
 const GlobalMessageDisplay = () => {
-    // Assuming useError returns an object with an error property
     const { message, type } = useMessage();
     if (!message) return null;
 
-    const baseStyle = "fixed bottom-5 left-5 px-4 py-2 rounded shadow-lg z-50 animate-fade-in text-white text-sm";
+    const getIcon = (type) => {
+        switch (type) {
+            case 'success': return '✅';
+            case 'error': return '❌';
+            case 'info': return 'ℹ️';
+            default: return '📝';
+        }
+    };
+
+    const baseStyle = "fixed top-4 right-4 px-6 py-4 rounded-xl shadow-2xl z-50 animate-slide-in-right text-white text-sm max-w-sm border backdrop-blur-lg";
     const variantStyle = {
-        success: "bg-green-600",
-        error: "bg-red-600",
-        info: "bg-blue-600",
+        success: "bg-green-500/90 border-green-400/50 shadow-green-500/25",
+        error: "bg-red-500/90 border-red-400/50 shadow-red-500/25",
+        info: "bg-blue-500/90 border-blue-400/50 shadow-blue-500/25",
     }
 
     return (
-        <div className={`${baseStyle} ${variantStyle[type] || "bg-gray-800"} `}>
-            <p>{message}</p>
+        <div className={`${baseStyle} ${variantStyle[type] || "bg-slate-800/90 border-slate-600/50"}`}>
+            <div className="flex items-center space-x-3">
+                <span className="text-lg">{getIcon(type)}</span>
+                <p className="font-medium">{message}</p>
+            </div>
         </div>
     );
 };

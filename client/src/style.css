@@ -1,1 +1,129 @@
 @import "tailwindcss";
+
+/* Global Custom Scrollbar Styles */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #8b5cf6 #1e293b;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.4);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #8b5cf6, #ec4899);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #7c3aed, #db2777);
+}
+
+*::-webkit-scrollbar-corner {
+  background: rgba(30, 41, 59, 0.4);
+}
+
+/* Custom Scrollbar for Kanban Columns */
+.column-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.column-scroll::-webkit-scrollbar-track {
+  background: rgba(51, 65, 85, 0.2);
+  border-radius: 3px;
+}
+
+.column-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #8b5cf6, #ec4899);
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.column-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #7c3aed, #db2777);
+}
+
+/* Custom Scrollbar for Activity Feed */
+.activity-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.activity-scroll::-webkit-scrollbar-track {
+  background: rgba(51, 65, 85, 0.2);
+  border-radius: 3px;
+}
+
+.activity-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #8b5cf6, #ec4899);
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.activity-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #7c3aed, #db2777);
+}
+
+/* Smooth animations */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+/* Hide scrollbar for specific elements when needed */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Modal animations */
+@keyframes slide-in-up {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 0.3s ease-out;
+}
+
+/* Enhanced slide-in-right animation */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
