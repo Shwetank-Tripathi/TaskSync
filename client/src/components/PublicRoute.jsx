@@ -4,19 +4,14 @@ import { useAuth } from "../hooks/useAuth";
 const PublicRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-400 mx-auto mb-4"></div>
-          <p className="text-purple-300 text-lg">Loading...</p>
-        </div>
-      </div>
-    );
+  // If user is authenticated, redirect to dashboard
+  // user will be truthy (user object) if authenticated, false if not, null while loading
+  if (user && !loading) {
+    return <Navigate to="/rooms" />;
   }
-  
-  if (user) return <Navigate to="/rooms" />;
 
+  // Show the page immediately while auth check happens in background
+  // This allows login page to render without waiting for API call
   return children;
 };
 

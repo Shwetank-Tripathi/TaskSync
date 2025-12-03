@@ -1,8 +1,8 @@
-const Room = require("../models/room");
-const Task = require("../models/task");
-const Log = require("../models/log");
+import Room from "../models/room.js";
+import Task from "../models/task.js";
+import Log from "../models/log.js";
 
-async function handleGetRooms(req, res){
+export async function handleGetRooms(req, res){
     try {
         const rooms = await Room.find().populate('members tasks logs');
         return res.status(200).json({rooms});
@@ -12,7 +12,7 @@ async function handleGetRooms(req, res){
     }
 }
 
-async function handleGetUserRooms(req, res){
+export async function handleGetUserRooms(req, res){
     try {
         const rooms = await Room.find({members: req.user._id}).select("_id name createdBy members tasks").populate("members", "name email _id").populate("tasks", "title description assignedUser priority status").populate("logs", "user target action timestamp");
         return res.status(200).json({rooms});
@@ -22,7 +22,7 @@ async function handleGetUserRooms(req, res){
     }
 }
 
-async function handleCreateRoom(req, res){
+export async function handleCreateRoom(req, res){
     try {
         const {name} = req.body;
         if (!name || !name.trim()) {
@@ -46,7 +46,7 @@ async function handleCreateRoom(req, res){
     }
 }
 
-async function handleGetRoom(req, res){
+export async function handleGetRoom(req, res){
     try {
         const room = await Room.findById(req.params.id)
             .populate("members", "name email _id")
@@ -67,7 +67,7 @@ async function handleGetRoom(req, res){
     }
 }
 
-async function handleUpdateRoom(req, res){
+export async function handleUpdateRoom(req, res){
     try {
         const {name, members} = req.body;
         
@@ -99,7 +99,7 @@ async function handleUpdateRoom(req, res){
     }
 }
 
-async function handleDeleteRoom(req, res){
+export async function handleDeleteRoom(req, res){
     try {
         const roomId = req.params.id;
         const userId = req.user._id;
@@ -139,7 +139,7 @@ async function handleDeleteRoom(req, res){
 }
 
 // NEW: Handle leaving a room (for non-creators)
-async function handleLeaveRoom(req, res) {
+export async function handleLeaveRoom(req, res) {
     try {
         const roomId = req.params.id;
         const userId = req.user._id;
@@ -185,14 +185,4 @@ async function handleLeaveRoom(req, res) {
         console.error("Error leaving room:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
-}
-
-module.exports = {
-    handleCreateRoom,
-    handleGetUserRooms,
-    handleGetRoom,
-    handleGetRooms,
-    handleUpdateRoom,
-    handleDeleteRoom,
-    handleLeaveRoom
 };

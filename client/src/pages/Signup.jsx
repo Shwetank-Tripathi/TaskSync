@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useMessage } from "../hooks/useMessage";
-import axios from "../axios";
+import axiosInstance from "../axios";
 
 const Signup = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -15,7 +15,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("/user/signup", form, {
+      const res = await axiosInstance.post("/user/signup", form, {
         withCredentials: true,
       });
 

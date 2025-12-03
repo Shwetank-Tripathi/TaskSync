@@ -1,6 +1,6 @@
-const express = require("express");
-const { handleCreateTask, handleDeleteTask, handleUpdateTask, handleGetTasks } = require("../controllers/task");
-const { isAuthenticated } = require("../middlewares/auth");
+import express from "express";
+import { handleCreateTask, handleDeleteTask, handleUpdateTask, handleGetTasks } from "../controllers/task.js";
+import { isAuthenticated } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -9,4 +9,4 @@ router.post("/add", isAuthenticated, handleCreateTask);
 router.delete("/delete/:id", isAuthenticated, handleDeleteTask);
 router.patch("/update/:id", isAuthenticated, handleUpdateTask);
 
-module.exports = router;
+export default router;

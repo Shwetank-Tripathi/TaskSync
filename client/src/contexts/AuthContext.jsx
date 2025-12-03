@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { socket } from "../socket";
-import axios from "../axios";
+import axiosInstance from "../axios";
 
 const AuthContext = createContext();
 
@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
   const [socketId, setSocketId] = useState(null);
 
   useEffect(() => {
-    axios.get("/user/verify", {
+    axiosInstance.get("/user/verify", {
       withCredentials: true, // send the httpOnly cookie
     })
       .then((res) => {
@@ -46,7 +46,7 @@ const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.get("/user/logout", {
+      await axiosInstance.get("/user/logout", {
         withCredentials: true,
       });
       setUser(false);

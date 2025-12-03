@@ -9,7 +9,7 @@ import LogsTable from "../components/sidebar/LogsTable";
 import KanbanBoard from "../components/Kanban/KanbanBoard";
 // import "../styles/dashboard.css";
 import { socket } from "../socket";
-import axios from "../axios";
+import axiosInstance from "../axios";
 
 const Dashboard = () => {
     const {user, socketId, logout} = useAuth();
@@ -28,7 +28,7 @@ const Dashboard = () => {
         try {
             setLoadingRooms(true);
             console.log("🔄 Loading rooms...");
-            const res = await axios.get("/rooms", {
+            const res = await axiosInstance.get("/rooms", {
                 withCredentials: true,
             });
             const roomsData = res.data.rooms || [];
@@ -56,7 +56,7 @@ const Dashboard = () => {
           setLoadingRoom(true);
           try {
             console.log("🏠 Loading room:", roomId);
-            const res = await axios.get(`/rooms/${roomId}`, {
+            const res = await axiosInstance.get(`/rooms/${roomId}`, {
               withCredentials: true,
             });
             const data = res.data;
@@ -180,6 +180,7 @@ const Dashboard = () => {
             console.log("🔄 Back to dashboard - refreshing rooms");
             loadRooms();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomId, user]);
 
     // Delete room (only for creators) - IMPROVED
@@ -190,7 +191,7 @@ const Dashboard = () => {
 
         try {
             console.log("🗑️ Deleting room:", roomToDelete.name);
-            await axios.delete(`/rooms/${roomToDelete._id}`, {
+            await axiosInstance.delete(`/rooms/${roomToDelete._id}`, {
                 withCredentials: true
             });
             
@@ -198,7 +199,7 @@ const Dashboard = () => {
             
             // If currently in the deleted room, navigate back to dashboard first
             if (roomId === roomToDelete._id) {
-                navigate("/dashboard");
+                navigate("/rooms");
             }
             
             // Then refresh the rooms list
@@ -222,7 +223,7 @@ const Dashboard = () => {
 
         try {
             console.log("👋 Leaving room:", roomToLeave.name);
-            await axios.patch(`/rooms/${roomToLeave._id}/leave`, {}, {
+            await axiosInstance.patch(`/rooms/${roomToLeave._id}/leave`, {}, {
                 withCredentials: true
             });
             
@@ -230,7 +231,7 @@ const Dashboard = () => {
             
             // If currently in the left room, navigate back to dashboard first
             if (roomId === roomToLeave._id) {
-                navigate("/dashboard");
+                navigate("/rooms");
             }
             
             // Then refresh the rooms list

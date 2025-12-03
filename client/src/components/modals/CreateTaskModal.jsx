@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../../axios";
+import axiosInstance from "../../axios";
 
 const CreateTaskModal = ({ isOpen, onClose, roomId, members, socketId, onTaskCreated }) => {
     const [title, setTitle] = useState("");
@@ -32,7 +32,7 @@ const CreateTaskModal = ({ isOpen, onClose, roomId, members, socketId, onTaskCre
 
         setLoading(true);
         try {
-            const res = await axios.post("/task/add", {
+            const res = await axiosInstance.post("/task/add", {
                 title, 
                 description, 
                 assignedUser: assignedUser || null, 

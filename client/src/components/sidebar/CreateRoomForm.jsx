@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../../axios";
+import axiosInstance from "../../axios";
 
 const CreateRoomForm = ({ onRoomCreated }) => {
     const [roomName, setRoomName] = useState("");
@@ -13,7 +13,7 @@ const CreateRoomForm = ({ onRoomCreated }) => {
         
         setLoading(true);
         try {
-            const res = await axios.post("/rooms/create", { name: roomName }, {
+            const res = await axiosInstance.post("/rooms/create", { name: roomName }, {
                 withCredentials: true,
             });
             const data = res.data;

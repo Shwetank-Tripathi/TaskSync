@@ -1,6 +1,6 @@
-const { getUser } = require("../services/jwt");
+import { getUser } from "../services/jwt.js";
 
-const auth = async (req, res, next) => {
+export const auth = async (req, res, next) => {
     const userUid = req.cookies?.uid;
     if (!userUid) {
         req.user = null;
@@ -16,15 +16,9 @@ const auth = async (req, res, next) => {
     }
 }
 
-const isAuthenticated = (req, res, next) => {
+export const isAuthenticated = (req, res, next) => {
     if(!req.user){
         return res.status(401).json({ message: "Unauthorized" });
     }
     next();
-}
-
-
-module.exports = {
-    auth,
-    isAuthenticated
 }

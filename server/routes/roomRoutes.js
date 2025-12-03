@@ -1,7 +1,7 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const { isAuthenticated } = require("../middlewares/auth");
-const { handleGetRooms, handleGetUserRooms, handleCreateRoom, handleGetRoom, handleUpdateRoom, handleDeleteRoom, handleLeaveRoom } = require("../controllers/room");
+import { isAuthenticated } from "../middlewares/auth.js";
+import { handleGetRooms, handleGetUserRooms, handleCreateRoom, handleGetRoom, handleUpdateRoom, handleDeleteRoom, handleLeaveRoom } from "../controllers/room.js";
 
 router.get("/all", isAuthenticated, handleGetRooms);
 router.get("/", isAuthenticated, handleGetUserRooms);
@@ -11,4 +11,4 @@ router.patch("/:id", isAuthenticated, handleUpdateRoom);
 router.delete("/:id", isAuthenticated, handleDeleteRoom);
 router.patch("/:id/leave", isAuthenticated, handleLeaveRoom);
 
-module.exports = router;
+export default router;

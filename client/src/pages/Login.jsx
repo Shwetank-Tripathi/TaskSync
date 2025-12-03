@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useMessage } from "../hooks/useMessage";
-import axios from "../axios";
+import axiosInstance from "../axios";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -17,7 +17,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("/user/login", form, {
+      const res = await axiosInstance.post("/user/login", form, {
         withCredentials: true,
       });
 

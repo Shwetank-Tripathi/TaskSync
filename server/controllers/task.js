@@ -1,8 +1,8 @@
-const Task = require("../models/task");
-const Room = require("../models/room");
-const Log = require("../models/log");
+import Task from "../models/task.js";
+import Room from "../models/room.js";
+import Log from "../models/log.js";
 
-async function handleGetTasks(req, res) {
+export async function handleGetTasks(req, res) {
     try {
         const tasks = await Task.find().populate("assignedUser");
         return res.status(200).json({ tasks });
@@ -12,7 +12,7 @@ async function handleGetTasks(req, res) {
     }
 }
 
-async function handleCreateTask(req, res) {
+export async function handleCreateTask(req, res) {
     try {
         const roomId = req.headers.roomid;
         const socketId = req.headers.socketid;
@@ -63,7 +63,7 @@ async function handleCreateTask(req, res) {
     }
 }
 
-async function handleDeleteTask(req, res) {
+export async function handleDeleteTask(req, res) {
     const roomId = req.headers.roomid;
     const socketId = req.headers.socketid;
     const id = req.params.id;
@@ -92,7 +92,7 @@ async function handleDeleteTask(req, res) {
     }
 }
 
-async function handleUpdateTask(req, res) {
+export async function handleUpdateTask(req, res) {
     const roomId = req.headers.roomid;
     const socketId = req.headers.socketid;
     const id = req.params.id;
@@ -158,13 +158,6 @@ async function handleUpdateTask(req, res) {
     }
 }
 
-async function handleConflict(req,res){
+// export async function handleConflict(req,res){
     
-}
-
-module.exports = {
-    handleGetTasks,
-    handleCreateTask,
-    handleDeleteTask,
-    handleUpdateTask
-}
+// }

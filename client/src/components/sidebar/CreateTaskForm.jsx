@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../../axios";
+import axiosInstance from "../../axios";
 
 const CreateTaskForm = ({roomId, members, socketId, onTaskCreated}) => {
     const [title, setTitle] = useState("");
@@ -14,7 +14,7 @@ const CreateTaskForm = ({roomId, members, socketId, onTaskCreated}) => {
 
         setLoading(true);
         try{
-            const res = await axios.post("/task/add", {title, description, assignedUser: assignedUser || null, priority, status}, {
+            const res = await axiosInstance.post("/task/add", {title, description, assignedUser: assignedUser || null, priority, status}, {
                 headers: {
                     roomid: roomId,
                     socketid: socketId,

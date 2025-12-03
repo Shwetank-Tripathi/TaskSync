@@ -1,6 +1,6 @@
-const express = require("express");
-const { handleLogin, handleSignup, handleLogout, handleGetUsers, handleVerifyUser } = require("../controllers/user");
-const { isAuthenticated } = require("../middlewares/auth");
+import express from "express";
+import { handleLogin, handleSignup, handleLogout, handleGetUsers, handleVerifyUser } from "../controllers/user.js";
+import { isAuthenticated } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -10,4 +10,4 @@ router.post("/signup", handleSignup);
 router.get("/logout", isAuthenticated, handleLogout);
 router.get("/", isAuthenticated, handleGetUsers);
 
-module.exports = router;
+export default router;

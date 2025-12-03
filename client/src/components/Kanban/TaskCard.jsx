@@ -1,4 +1,4 @@
-import axios from "../../axios";
+import axiosInstance from "../../axios";
 import { useState } from "react";
 import AlertModal from "../modals/AlertModal";
 
@@ -116,7 +116,7 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
         force: true 
       };
       
-      const res = await axios.patch(`/task/update/${task._id}`, updateData, {
+      const res = await axiosInstance.patch(`/task/update/${task._id}`, updateData, {
         headers: {
           roomid: roomId,
           socketid: socketId,
@@ -153,7 +153,7 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
       async () => {
         setDeleting(true);
         try {
-          const res = await axios.delete(`/task/delete/${task._id}`, {
+          const res = await axiosInstance.delete(`/task/delete/${task._id}`, {
             headers: {
               roomid: roomId,
               socketid: socketId,
@@ -204,7 +204,7 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
       
       console.log("📤 Sending to server:", updateData);
       
-      const res = await axios.patch(`/task/update/${task._id}`, updateData, {
+      const res = await axiosInstance.patch(`/task/update/${task._id}`, updateData, {
         headers: {
           roomid: roomId,
           socketid: socketId,
@@ -266,7 +266,7 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
     
     setUpdating(true);
     try {
-      const res = await axios.patch(`/task/update/${task._id}`, { 
+      const res = await axiosInstance.patch(`/task/update/${task._id}`, { 
         assignedUser: memberWithFewestTasks.member._id,
         version: task.version 
       }, {
