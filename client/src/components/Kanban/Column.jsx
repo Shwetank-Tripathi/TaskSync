@@ -49,35 +49,35 @@ const Column = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-0">
-      <div className={`${bgColor} ${borderColor} border-2 rounded-t-xl p-4 backdrop-blur-sm flex-shrink-0`}>
-        <div className="flex items-center justify-between mb-2">
-          <h3 className={`text-lg font-semibold text-white flex items-center bg-gradient-to-r ${color} bg-clip-text text-transparent`}>
-            <span className="text-xl mr-2">{icon}</span>
+    <div className="flex-shrink-0 lg:flex-1 flex flex-col min-h-[180px] sm:min-h-[220px] lg:min-h-0 w-full lg:w-auto lg:min-w-[280px]">
+      {/* Column Header */}
+      <div className={`${bgColor} ${borderColor} border-2 rounded-t-xl p-2.5 sm:p-3 xl:p-4 backdrop-blur-sm flex-shrink-0`}>
+        <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+          <h3 className={`text-sm sm:text-base xl:text-lg font-semibold text-white flex items-center bg-gradient-to-r ${color} bg-clip-text text-transparent`}>
+            <span className="text-base sm:text-lg xl:text-xl mr-1.5 sm:mr-2">{icon}</span>
             {title}
           </h3>
-          <span className={`px-2 py-1 text-xs font-medium bg-gradient-to-r ${color} text-white rounded-full`}>
+          <span className={`px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium bg-gradient-to-r ${color} text-white rounded-full`}>
             {tasks.length}
           </span>
         </div>
-        <div className={`h-1 bg-gradient-to-r ${color} rounded-full`}></div>
+        <div className={`h-0.5 sm:h-1 bg-gradient-to-r ${color} rounded-full`}></div>
       </div>
+      
+      {/* Column Body */}
       <div 
-        className={`${bgColor} ${borderColor} border-2 border-t-0 rounded-b-xl flex-1 p-4 min-h-0 backdrop-blur-sm overflow-hidden`}
+        className={`${bgColor} ${borderColor} border-2 border-t-0 rounded-b-xl flex-1 p-2.5 sm:p-3 lg:p-4 min-h-0 backdrop-blur-sm overflow-hidden`}
         onDragOver={e => e.preventDefault()}
         onDrop={handleDrop}
       >
-        <div className="h-full overflow-y-auto space-y-3 pr-2 column-scroll">
+        <div className="h-full overflow-y-auto space-y-2 sm:space-y-3 pr-1 sm:pr-2 column-scroll">
           {tasks.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-32 text-slate-400">
-              <div className="text-3xl mb-2 opacity-50">{icon}</div>
-              <p className="text-sm text-center">
+            <div className="flex flex-col items-center justify-center h-20 sm:h-28 text-slate-400">
+              <div className="text-xl sm:text-2xl mb-1 sm:mb-1.5 opacity-50">{icon}</div>
+              <p className="text-xs sm:text-sm text-center">
                 {status === 'todo' ? 'No tasks yet' : 
                  status === 'inProgress' ? 'Nothing in progress' : 
                  'No completed tasks'}
-              </p>
-              <p className="text-xs text-center mt-1 opacity-75">
-                Drag tasks here or create new ones
               </p>
             </div>
           ) : (

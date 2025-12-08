@@ -7,8 +7,15 @@
 }
 
 *::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
+}
+
+@media (min-width: 640px) {
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
 }
 
 *::-webkit-scrollbar-track {
@@ -32,7 +39,13 @@
 
 /* Custom Scrollbar for Kanban Columns */
 .column-scroll::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
+}
+
+@media (min-width: 640px) {
+  .column-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
 }
 
 .column-scroll::-webkit-scrollbar-track {
@@ -52,7 +65,13 @@
 
 /* Custom Scrollbar for Activity Feed */
 .activity-scroll::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
+}
+
+@media (min-width: 640px) {
+  .activity-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
 }
 
 .activity-scroll::-webkit-scrollbar-track {
@@ -68,6 +87,22 @@
 
 .activity-scroll::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #7c3aed, #db2777);
+}
+
+/* Sidebar slide animation */
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.3s ease-out;
 }
 
 /* Smooth animations */
@@ -112,18 +147,92 @@
   animation: slide-in-up 0.3s ease-out;
 }
 
-/* Enhanced slide-in-right animation */
-@keyframes slide-in-right {
+/* Mobile modal slide up from bottom */
+@keyframes slide-up {
   from {
-    transform: translateX(100%);
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+/* Dragging task card styles */
+.task-dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+.drop-zone-active {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.5) !important;
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from {
     opacity: 0;
   }
   to {
-    transform: translateX(0);
     opacity: 1;
   }
 }
 
-.animate-slide-in-right {
-  animation: slide-in-right 0.3s ease-out;
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+/* Mobile overlay backdrop */
+.sidebar-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+/* Line clamp utilities for truncating text */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Touch-friendly tap targets */
+@media (max-width: 640px) {
+  button, 
+  [role="button"],
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  input, 
+  select, 
+  textarea {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+}
+
+/* Smooth transitions for responsive layout changes */
+.transition-layout {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Safe area insets for mobile devices with notches */
+@supports (padding: max(0px)) {
+  .safe-area-inset {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
 }
