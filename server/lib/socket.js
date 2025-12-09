@@ -2,9 +2,10 @@ import { Server } from "socket.io";
 import http from "http";
 import express from "express";
 import Room from "../models/room.js";
+import { loadEnvFile } from "process";
 
 if (process.env.NODE_ENV !== "production") {
-  process.loadEnvFile();
+  loadEnvFile();
 }
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 const app = express();

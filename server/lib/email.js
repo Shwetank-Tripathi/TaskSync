@@ -1,6 +1,8 @@
 import nodemailer from "nodemailer";
+import { loadEnvFile } from "process";
+
 if (process.env.NODE_ENV !== "production") {
-  process.loadEnvFile();
+  loadEnvFile();
 }
 
 const transporter = nodemailer.createTransport({
