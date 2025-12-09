@@ -24,6 +24,7 @@ const Login = () => {
       if (res.status === 200) {
         const data = res.data;
         setUser(data.user);
+        await new Promise(resolve => setTimeout(resolve, 100));
         navigate("/rooms");
         showMessage(data.message, "success");
       }
