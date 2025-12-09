@@ -173,6 +173,11 @@ export async function handleUpdateTask(req, res) {
       await task.save();
       update.version = task.version;
 
+      if (update.assignedUser) {
+        await task.populate("assignedUser", "name email _id");
+        update.assignedUser = task.assignedUser;
+      }
+
       /*
       Creates the log for the task update.
       */
