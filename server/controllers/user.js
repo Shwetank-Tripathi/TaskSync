@@ -44,7 +44,6 @@ export async function handleLogin(req, res) {
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         maxAge: 30 * 24 * 60 * 60 * 1000,
-        domain: process.env.NODE_ENV === "production" ? undefined : "localhost",
       })
       .json({
         message: "Logged in successfully",
