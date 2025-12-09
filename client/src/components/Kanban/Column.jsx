@@ -53,7 +53,7 @@ const Column = ({
       {/* Column Header */}
       <div className={`${bgColor} ${borderColor} border-2 rounded-t-xl p-2.5 sm:p-3 xl:p-4 backdrop-blur-sm flex-shrink-0`}>
         <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-          <h3 className={`text-sm sm:text-base xl:text-lg font-semibold text-white flex items-center bg-gradient-to-r ${color} bg-clip-text text-transparent`}>
+          <h3 className={`text-sm sm:text-base xl:text-lg font-semibold text-white flex items-center`}>
             <span className="text-base sm:text-lg xl:text-xl mr-1.5 sm:mr-2">{icon}</span>
             {title}
           </h3>
@@ -72,7 +72,7 @@ const Column = ({
       >
         <div className="h-full overflow-y-auto space-y-2 sm:space-y-3 pr-1 sm:pr-2 column-scroll">
           {tasks.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-20 sm:h-28 text-slate-400">
+            <div className="flex flex-col items-center justify-center h-20 sm:h-28 text-gray-400">
               <div className="text-xl sm:text-2xl mb-1 sm:mb-1.5 opacity-50">{icon}</div>
               <p className="text-xs sm:text-sm text-center">
                 {status === 'todo' ? 'No tasks yet' : 

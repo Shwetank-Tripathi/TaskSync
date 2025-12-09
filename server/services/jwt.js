@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
-process.loadEnvFile();
+if (process.env.NODE_ENV !== "production") {
+  process.loadEnvFile();
+}
 const secret = process.env.JWT_SECRET;
 
 export function setUser(user) {

@@ -6,10 +6,12 @@ import connectDB from "./lib/connectDB.js";
 import userRoutes from "./routes/userRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
-import { loadEnvFile } from "process";
-loadEnvFile();
 import { auth } from "./middlewares/auth.js";
 import { app, httpServer } from "./lib/socket.js";
+
+if (process.env.NODE_ENV !== "production") {
+  process.loadEnvFile();
+}
 
 const PORT = process.env.PORT || 3000;
 
@@ -27,7 +29,7 @@ app.use(cookieParser());
 app.use(express.json()); //built-in function in Express.js used to parse incoming requests with JSON payloads
 app.use(express.urlencoded({ extended: true })); //built-in function in Express.js used to parse incoming requests with URL-encoded payloads
 
-app.get("/",(req, res)=>{
+app.get("/", (req, res) => {
   res.send("Hello,World");
 });
 

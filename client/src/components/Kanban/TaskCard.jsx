@@ -1,12 +1,13 @@
 import axiosInstance from "../../axios";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { Pencil, Trash2, Check, X, AlertTriangle, Target } from "lucide-react";
 import AlertModal from "../modals/AlertModal";
 import TaskDetailModal from "../modals/TaskDetailModal";
 
 const priorities = ["low", "medium", "high"];
 
-const ConflictModal = ({ serverTask, clientTask, onMerge, onOverwrite, onCancel }) => {
+const ConflictModal = ({ serverTask, clientTask, onMerge, onOverwrite, onCancel, members = [] }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -15,33 +16,42 @@ const ConflictModal = ({ serverTask, clientTask, onMerge, onOverwrite, onCancel 
 
   if (!mounted) return null;
 
+  // Helper to get user name from ID or object
+  const getAssignedUserName = (assignedUser) => {
+    if (!assignedUser) return 'Unassigned';
+    if (typeof assignedUser === 'object' && assignedUser.name) return assignedUser.name;
+    // If it's an ID string, look up in members
+    const member = members.find(m => m._id === assignedUser);
+    return member?.name || 'Unassigned';
+  };
+
   return createPortal(
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[100] p-2 sm:p-4">
-      <div className="bg-slate-800 border border-purple-500/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 max-w-lg sm:max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-gray-900 border border-blue-600/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 max-w-lg sm:max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <h3 className="text-base sm:text-xl font-bold text-white mb-3 sm:mb-4 flex items-center">
-          <span className="text-xl sm:text-2xl mr-2">⚠️</span>
+          <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-orange-500" />
           Conflict Detected!
         </h3>
-        <p className="text-slate-300 mb-4 sm:mb-6 text-sm sm:text-base">Another user has modified this task. Choose how to resolve:</p>
+        <p className="text-gray-300 mb-4 sm:mb-6 text-sm sm:text-base">Another user has modified this task. Choose how to resolve:</p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
-          <div className="bg-slate-700/50 rounded-lg p-3 sm:p-4 border border-blue-500/30">
+          <div className="bg-gray-800/50 rounded-lg p-3 sm:p-4 border border-blue-500/30">
             <h4 className="font-semibold text-blue-400 mb-2 sm:mb-3 text-sm sm:text-base">Your Changes:</h4>
             <div className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
-              <p><span className="text-slate-400">Title:</span> <span className="text-white">{clientTask.title}</span></p>
-              <p><span className="text-slate-400">Description:</span> <span className="text-white">{clientTask.description}</span></p>
-              <p><span className="text-slate-400">Assigned:</span> <span className="text-white">{clientTask.assignedUser || 'Unassigned'}</span></p>
-              <p><span className="text-slate-400">Priority:</span> <span className="text-white">{clientTask.priority}</span></p>
+              <p><span className="text-gray-400">Title:</span> <span className="text-white">{clientTask.title}</span></p>
+              <p><span className="text-gray-400">Description:</span> <span className="text-white">{clientTask.description}</span></p>
+              <p><span className="text-gray-400">Assigned:</span> <span className="text-white">{getAssignedUserName(clientTask.assignedUser)}</span></p>
+              <p><span className="text-gray-400">Priority:</span> <span className="text-white">{clientTask.priority}</span></p>
             </div>
           </div>
           
-          <div className="bg-slate-700/50 rounded-lg p-3 sm:p-4 border border-orange-500/30">
+          <div className="bg-gray-800/50 rounded-lg p-3 sm:p-4 border border-orange-500/30">
             <h4 className="font-semibold text-orange-400 mb-2 sm:mb-3 text-sm sm:text-base">Server Version:</h4>
             <div className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
-              <p><span className="text-slate-400">Title:</span> <span className="text-white">{serverTask.title}</span></p>
-              <p><span className="text-slate-400">Description:</span> <span className="text-white">{serverTask.description}</span></p>
-              <p><span className="text-slate-400">Assigned:</span> <span className="text-white">{serverTask.assignedUser?.name || 'Unassigned'}</span></p>
-              <p><span className="text-slate-400">Priority:</span> <span className="text-white">{serverTask.priority}</span></p>
+              <p><span className="text-gray-400">Title:</span> <span className="text-white">{serverTask.title}</span></p>
+              <p><span className="text-gray-400">Description:</span> <span className="text-white">{serverTask.description}</span></p>
+              <p><span className="text-gray-400">Assigned:</span> <span className="text-white">{getAssignedUserName(serverTask.assignedUser)}</span></p>
+              <p><span className="text-gray-400">Priority:</span> <span className="text-white">{serverTask.priority}</span></p>
             </div>
           </div>
         </div>
@@ -49,7 +59,7 @@ const ConflictModal = ({ serverTask, clientTask, onMerge, onOverwrite, onCancel 
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:justify-end">
           <button 
             onClick={onCancel}
-            className="px-3 sm:px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg transition-colors cursor-pointer text-sm sm:text-base order-3 sm:order-1"
+            className="px-3 sm:px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors cursor-pointer text-sm sm:text-base order-3 sm:order-1"
           >
             Cancel
           </button>
@@ -150,7 +160,9 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
 
   const handleConflictMerge = () => {
     setShowConflictModal(false);
-    onTaskUpdated(task._id, conflictData.serverTask);
+    // Extract only relevant task fields from serverTask
+    const { title, description, assignedUser, priority, status, version } = conflictData.serverTask;
+    onTaskUpdated(task._id, { title, description, assignedUser, priority, status, version }, null);
     cancelEdit();
     setConflictData(null);
     showAlert("Task updated successfully!", "success");
@@ -241,12 +253,29 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
     } catch (error) {
       console.error("❌ Error updating task:", error);
       
+      // Revert optimistic update
       const revertChanges = { [editField]: task[editField] };
       onTaskUpdated(task._id, revertChanges, null);
       
-      const message = error.response?.data?.message || "Failed to update task";
-      showAlert(message, "error", "Update Failed");
-      cancelEdit();
+      // Check if it's a conflict (409)
+      if (error.response?.status === 409) {
+        const { serverTask, clientTask } = error.response.data;
+        // Store conflict data and show modal
+        setConflictData({
+          serverTask,
+          clientTask: {
+            ...clientTask,
+            [editField]: editValue  // Include the field user was editing
+          }
+        });
+        setShowConflictModal(true);
+        // Don't cancelEdit() - let user decide in modal
+      } else {
+        // Other errors - show alert
+        const message = error.response?.data?.message || "Failed to update task";
+        showAlert(message, "error", "Update Failed");
+        cancelEdit();
+      }
     } finally {
       setUpdating(false);
     }
@@ -306,10 +335,25 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
     } catch (error) {
       console.error("❌ Error smart assigning:", error);
       
+      // Revert optimistic update
       onTaskUpdated(task._id, { assignedUser: task.assignedUser }, null);
       
-      const message = error.response?.data?.message || "Failed to assign task";
-      showAlert(message, "error", "Assignment Failed");
+      // Check if it's a conflict (409)
+      if (error.response?.status === 409) {
+        const { serverTask, clientTask } = error.response.data;
+        // Store conflict data with the member being assigned
+        setConflictData({
+          serverTask,
+          clientTask: {
+            ...clientTask,
+            assignedUser: memberWithFewestTasks.member._id
+          }
+        });
+        setShowConflictModal(true);
+      } else {
+        const message = error.response?.data?.message || "Failed to assign task";
+        showAlert(message, "error", "Assignment Failed");
+      }
     } finally {
       setUpdating(false);
     }
@@ -337,23 +381,23 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
     <>
       {/* COMPACT VIEW - Below xl (1280px), click to open modal */}
       <div 
-        className="lg:hidden bg-slate-800/80 backdrop-blur-sm border border-slate-600/50 rounded-lg p-2.5 hover:border-purple-500/40 transition-all duration-200 cursor-pointer group hover:shadow-lg hover:shadow-purple-500/10 active:scale-[0.98]"
+        className="lg:hidden bg-gray-800/80 backdrop-blur-sm border border-gray-600/50 rounded-lg p-2.5 hover:border-blue-600/40 transition-all duration-200 cursor-pointer group hover:shadow-lg hover:shadow-blue-500/10 active:scale-[0.98]"
         onClick={() => setShowDetailModal(true)}
       >
         <div className="flex items-center justify-between gap-2">
-          <h4 className="font-semibold text-white text-xs sm:text-sm leading-tight group-hover:text-purple-300 transition-colors truncate flex-1">
+          <h4 className="font-semibold text-white text-xs sm:text-sm leading-tight group-hover:text-blue-400 transition-colors truncate flex-1">
             {task.title}
           </h4>
           <div className={`w-2.5 h-2.5 rounded-full ${getPriorityColor(task.priority)} flex-shrink-0`} title={`${task.priority} priority`}></div>
         </div>
         {task.assignedUser && (
-          <p className="text-[10px] sm:text-xs text-slate-400 mt-1 truncate">{task.assignedUser.name}</p>
+          <p className="text-[10px] sm:text-xs text-gray-400 mt-1 truncate">{task.assignedUser.name}</p>
         )}
       </div>
 
       {/* DESKTOP VIEW - xl+ (1280px+), full card with inline editing */}
       <div 
-        className="hidden lg:block bg-slate-800/80 backdrop-blur-sm border border-slate-600/50 rounded-xl p-4 hover:border-purple-500/40 transition-all duration-200 cursor-grab active:cursor-grabbing group hover:shadow-lg hover:shadow-purple-500/10"
+        className="hidden lg:block bg-gray-800/80 backdrop-blur-sm border border-gray-600/50 rounded-xl p-4 hover:border-blue-600/40 transition-all duration-200 cursor-grab active:cursor-grabbing group hover:shadow-lg hover:shadow-blue-500/10"
         draggable
         onDragStart={e => e.dataTransfer.setData("task-id", task._id)}
       >
@@ -361,14 +405,14 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
           <div className="flex-1 min-w-0">
             {editField === "title" ? (
               <div className="space-y-2">
-                <input value={editValue} onChange={e => setEditValue(e.target.value)} autoFocus className="w-full px-2 py-1 bg-slate-700 border border-slate-600 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                <input value={editValue} onChange={e => setEditValue(e.target.value)} autoFocus className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-600" />
                 <div className="flex gap-2">
-                  <button onClick={saveEdit} disabled={updating} className="px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-xs disabled:opacity-50 cursor-pointer">{updating ? "..." : "Save"}</button>
-                  <button onClick={cancelEdit} disabled={updating} className="px-2 py-1 bg-slate-500 hover:bg-slate-600 text-white rounded text-xs cursor-pointer">Cancel</button>
+                  <button onClick={saveEdit} disabled={updating} className="px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-xs disabled:opacity-50 cursor-pointer flex items-center gap-1">{updating ? "..." : <><Check className="w-3 h-3" /> Save</>}</button>
+                  <button onClick={cancelEdit} disabled={updating} className="px-2 py-1 bg-gray-600 hover:bg-gray-500 text-white rounded text-xs cursor-pointer flex items-center gap-1"><X className="w-3 h-3" /> Cancel</button>
                 </div>
               </div>
             ) : (
-              <h4 className="font-semibold text-white text-sm leading-tight mb-2 group-hover:text-purple-300 transition-colors cursor-pointer truncate" onClick={() => startEdit("title", task.title)} title="Click to edit title">{task.title}</h4>
+              <h4 className="font-semibold text-white text-sm leading-tight mb-2 group-hover:text-blue-400 transition-colors cursor-pointer truncate" onClick={() => startEdit("title", task.title)} title="Click to edit title">{task.title}</h4>
             )}
           </div>
           <div className={`w-3 h-3 rounded-full ${getPriorityColor(task.priority)} flex-shrink-0 ml-2`} title={`${task.priority} priority`}></div>
@@ -377,46 +421,46 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
         <div className="mb-3">
           {editField === "description" ? (
             <div className="space-y-2">
-              <textarea value={editValue} onChange={e => setEditValue(e.target.value)} autoFocus rows="2" className="w-full px-2 py-1 bg-slate-700 border border-slate-600 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none" />
+              <textarea value={editValue} onChange={e => setEditValue(e.target.value)} autoFocus rows="2" className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none" />
               <div className="flex gap-2">
-                <button onClick={saveEdit} disabled={updating} className="px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-xs disabled:opacity-50 cursor-pointer">{updating ? "..." : "Save"}</button>
-                <button onClick={cancelEdit} disabled={updating} className="px-2 py-1 bg-slate-500 hover:bg-slate-600 text-white rounded text-xs cursor-pointer">Cancel</button>
+                <button onClick={saveEdit} disabled={updating} className="px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-xs disabled:opacity-50 cursor-pointer flex items-center gap-1">{updating ? "..." : <><Check className="w-3 h-3" /> Save</>}</button>
+                <button onClick={cancelEdit} disabled={updating} className="px-2 py-1 bg-gray-600 hover:bg-gray-500 text-white rounded text-xs cursor-pointer flex items-center gap-1"><X className="w-3 h-3" /> Cancel</button>
               </div>
             </div>
           ) : (
-            <p className="text-slate-300 text-xs leading-relaxed cursor-pointer hover:text-slate-200 transition-colors line-clamp-2" onClick={() => startEdit("description", task.description)} title="Click to edit description">{task.description || "No description"}</p>
+            <p className="text-gray-300 text-xs leading-relaxed cursor-pointer hover:text-gray-200 transition-colors line-clamp-2" onClick={() => startEdit("description", task.description)} title="Click to edit description">{task.description || "No description"}</p>
           )}
         </div>
 
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs text-slate-400 flex-shrink-0">Assigned:</span>
+            <span className="text-xs text-gray-400 flex-shrink-0">Assigned:</span>
             {editField === "assignedUser" ? (
               <div className="flex items-center gap-2 flex-1 justify-end">
-                <select value={editValue} onChange={e => setEditValue(e.target.value)} autoFocus className="text-xs bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <select value={editValue} onChange={e => setEditValue(e.target.value)} autoFocus className="text-xs bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:ring-2 focus:ring-blue-600">
                   <option value="">Unassigned</option>
                   {members.map(member => <option key={member._id} value={member._id}>{member.name}</option>)}
                 </select>
-                <button onClick={saveEdit} disabled={updating} className="px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-xs disabled:opacity-50 cursor-pointer">{updating ? "..." : "✓"}</button>
-                <button onClick={cancelEdit} disabled={updating} className="px-2 py-1 bg-slate-500 hover:bg-slate-600 text-white rounded text-xs cursor-pointer">✕</button>
+                <button onClick={saveEdit} disabled={updating} className="px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-xs disabled:opacity-50 cursor-pointer flex items-center"><Check className="w-3 h-3" /></button>
+                <button onClick={cancelEdit} disabled={updating} className="px-2 py-1 bg-gray-600 hover:bg-gray-500 text-white rounded text-xs cursor-pointer flex items-center"><X className="w-3 h-3" /></button>
               </div>
             ) : (
-              <span className="text-xs text-white cursor-pointer hover:text-purple-300 transition-colors truncate" onClick={() => startEdit("assignedUser", task.assignedUser?._id || "")} title="Click to edit assignee">{task.assignedUser ? task.assignedUser.name : "Unassigned"}</span>
+              <span className="text-xs text-white cursor-pointer hover:text-blue-400 transition-colors truncate" onClick={() => startEdit("assignedUser", task.assignedUser?._id || "")} title="Click to edit assignee">{task.assignedUser ? task.assignedUser.name : "Unassigned"}</span>
             )}
           </div>
 
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs text-slate-400 flex-shrink-0">Priority:</span>
+            <span className="text-xs text-gray-400 flex-shrink-0">Priority:</span>
             {editField === "priority" ? (
               <div className="flex items-center gap-2 flex-1 justify-end">
-                <select value={editValue} onChange={e => setEditValue(e.target.value)} autoFocus className="text-xs bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <select value={editValue} onChange={e => setEditValue(e.target.value)} autoFocus className="text-xs bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:ring-2 focus:ring-blue-600">
                   {priorities.map(p => <option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>)}
                 </select>
-                <button onClick={saveEdit} disabled={updating} className="px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-xs disabled:opacity-50 cursor-pointer">{updating ? "..." : "✓"}</button>
-                <button onClick={cancelEdit} disabled={updating} className="px-2 py-1 bg-slate-500 hover:bg-slate-600 text-white rounded text-xs cursor-pointer">✕</button>
+                <button onClick={saveEdit} disabled={updating} className="px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-xs disabled:opacity-50 cursor-pointer flex items-center"><Check className="w-3 h-3" /></button>
+                <button onClick={cancelEdit} disabled={updating} className="px-2 py-1 bg-gray-600 hover:bg-gray-500 text-white rounded text-xs cursor-pointer flex items-center"><X className="w-3 h-3" /></button>
               </div>
             ) : (
-              <span className="text-xs text-white cursor-pointer hover:text-purple-300 transition-colors flex items-center" onClick={() => startEdit("priority", task.priority)} title="Click to edit priority">
+              <span className="text-xs text-white cursor-pointer hover:text-blue-400 transition-colors flex items-center" onClick={() => startEdit("priority", task.priority)} title="Click to edit priority">
                 <span className="mr-1">{getPriorityIcon(task.priority)}</span>{task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
               </span>
             )}
@@ -425,13 +469,13 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
 
         {!task.assignedUser && members.length > 0 && (
           <div className="mt-3">
-            <button onClick={smartAssign} disabled={updating} className="w-full py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 disabled:from-slate-600 disabled:to-slate-600 text-white text-xs font-medium rounded transition-all cursor-pointer">{updating ? "Assigning..." : "🎯 Smart Assign"}</button>
+            <button onClick={smartAssign} disabled={updating} className="w-full py-1.5 bg-blue-800 hover:bg-blue-900 disabled:bg-gray-600 text-white text-xs font-medium rounded transition-all cursor-pointer flex items-center justify-center gap-2">{updating ? "Assigning..." : <><Target className="w-3 h-3" /> Smart Assign</>}</button>
           </div>
         )}
 
         <div className="mt-3 flex justify-end">
           <button onClick={handleDelete} disabled={deleting || updating} className="p-1.5 text-red-400 hover:text-red-300 hover:bg-red-500/20 rounded transition-all disabled:opacity-50 cursor-pointer" title="Delete task">
-            {deleting ? <div className="animate-spin w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full"></div> : <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>}
+            {deleting ? <div className="animate-spin w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full"></div> : <Trash2 className="w-4 h-4" />}
           </button>
         </div>
       </div>
@@ -454,7 +498,7 @@ const TaskCard = ({ task, roomId, socketId, allTasks, onTaskUpdated, onTaskDelet
 
       {/* Conflict Modal */}
       {showConflictModal && conflictData && (
-        <ConflictModal serverTask={conflictData.serverTask} clientTask={conflictData.clientTask} onMerge={handleConflictMerge} onOverwrite={handleConflictOverwrite} onCancel={handleConflictCancel} />
+        <ConflictModal serverTask={conflictData.serverTask} clientTask={conflictData.clientTask} onMerge={handleConflictMerge} onOverwrite={handleConflictOverwrite} onCancel={handleConflictCancel} members={members} />
       )}
     </>
   );

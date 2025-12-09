@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
-process.loadEnvFile();
+if (process.env.NODE_ENV !== "production") {
+  process.loadEnvFile();
+}
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",

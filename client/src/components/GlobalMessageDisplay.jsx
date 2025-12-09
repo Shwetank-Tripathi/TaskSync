@@ -1,3 +1,4 @@
+import { CheckCircle2, XCircle, Info, FileText } from "lucide-react";
 import { useMessage } from "../hooks/useMessage";
 
 const GlobalMessageDisplay = () => {
@@ -6,10 +7,10 @@ const GlobalMessageDisplay = () => {
 
     const getIcon = (type) => {
         switch (type) {
-            case 'success': return '✅';
-            case 'error': return '❌';
-            case 'info': return 'ℹ️';
-            default: return '📝';
+            case 'success': return <CheckCircle2 className="w-5 h-5" />;
+            case 'error': return <XCircle className="w-5 h-5" />;
+            case 'info': return <Info className="w-5 h-5" />;
+            default: return <FileText className="w-5 h-5" />;
         }
     };
 
@@ -21,9 +22,9 @@ const GlobalMessageDisplay = () => {
     }
 
     return (
-        <div className={`${baseStyle} ${variantStyle[type] || "bg-slate-800/90 border-slate-600/50"}`}>
+        <div className={`${baseStyle} ${variantStyle[type] || "bg-gray-800/90 border-gray-700/50"}`}>
             <div className="flex items-center space-x-3">
-                <span className="text-lg">{getIcon(type)}</span>
+                <span>{getIcon(type)}</span>
                 <p className="font-medium">{message}</p>
             </div>
         </div>

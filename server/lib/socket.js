@@ -3,7 +3,9 @@ import http from "http";
 import express from "express";
 import Room from "../models/room.js";
 
-process.loadEnvFile();
+if (process.env.NODE_ENV !== "production") {
+  process.loadEnvFile();
+}
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 const app = express();
 const httpServer = http.createServer(app); //need to pass the express instance to the http server to handle the express routes and middleware.

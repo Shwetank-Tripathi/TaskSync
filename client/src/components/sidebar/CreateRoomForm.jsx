@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Plus } from "lucide-react";
 import axiosInstance from "../../axios";
 
 const CreateRoomForm = ({ onRoomCreated }) => {
@@ -35,22 +36,20 @@ const CreateRoomForm = ({ onRoomCreated }) => {
     };
 
     return (
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-purple-500/20 rounded-lg p-3 sm:p-4 shadow-lg hover:border-purple-500/30 transition-all duration-200">
+        <div className="bg-gray-800 backdrop-blur-sm border border-gray-700 rounded-lg p-3 sm:p-4 shadow-lg hover:border-blue-600 transition-all duration-200">
             {/* Header */}
             <div className="mb-3 sm:mb-4">
                 <h3 className="text-sm sm:text-base font-semibold text-white flex items-center mb-1">
-                    <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
+                    <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-blue-400" />
                     Create a New Room
                 </h3>
-                <p className="text-[10px] sm:text-xs text-slate-400">Start collaborating with your team</p>
+                <p className="text-[10px] sm:text-xs text-gray-400">Start collaborating with your team</p>
             </div>
             
             {/* Form */}
             <div className="space-y-2 sm:space-y-3">
                 <div>
-                    <label className="block text-[10px] sm:text-xs font-medium text-slate-300 mb-1 sm:mb-1.5">
+                    <label className="block text-[10px] sm:text-xs font-medium text-gray-300 mb-1 sm:mb-1.5">
                         Room Name
                     </label>
                     <input
@@ -62,15 +61,15 @@ const CreateRoomForm = ({ onRoomCreated }) => {
                         required
                         maxLength="50"
                         disabled={loading}
-                        className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-slate-700/50 border border-slate-600 rounded-md text-white text-xs sm:text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-gray-700 border border-gray-600 rounded-md text-white text-xs sm:text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
-                    <p className="text-[10px] sm:text-xs text-slate-400 mt-1">{roomName.length}/50 characters</p>
+                    <p className="text-[10px] sm:text-xs text-gray-400 mt-1">{roomName.length}/50 characters</p>
                 </div>
                 
                 <button 
                     onClick={handleCreate} 
                     disabled={loading || !roomName.trim()}
-                    className="w-full py-2 sm:py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 disabled:from-slate-600 disabled:to-slate-600 text-white text-xs sm:text-sm font-medium rounded-md transition-all duration-200 shadow-lg hover:shadow-purple-500/25 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center cursor-pointer"
+                    className="w-full py-2 sm:py-2.5 bg-blue-800 hover:bg-blue-900 disabled:bg-gray-600 text-white text-xs sm:text-sm font-medium rounded-md transition-all duration-200 shadow-lg hover:shadow-blue-800/25 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center cursor-pointer"
                 >
                     {loading ? (
                         <>
@@ -79,9 +78,7 @@ const CreateRoomForm = ({ onRoomCreated }) => {
                         </>
                     ) : (
                         <>
-                            <svg className="w-3 h-3 mr-1.5 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                            </svg>
+                            <Plus className="w-3 h-3 mr-1.5 sm:mr-2" />
                             Create
                         </>
                     )}
