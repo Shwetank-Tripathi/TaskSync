@@ -41,8 +41,8 @@ export async function handleLogin(req, res) {
       .status(200)
       .cookie("uid", uid, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        secure: true,
+        sameSite: "none",
         maxAge: 30 * 24 * 60 * 60 * 1000,
         path: "/",
       })
@@ -97,8 +97,8 @@ export async function handleLogout(req, res) {
     .status(200)
     .clearCookie("uid", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 0,
       path: "/",
     })
