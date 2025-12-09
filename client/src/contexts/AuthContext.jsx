@@ -49,13 +49,14 @@ const AuthProvider = ({ children }) => {
       await axiosInstance.get("/user/logout", {
         withCredentials: true,
       });
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally{
       setUser(false);
       if (socket.connected) {
         socket.disconnect();
         setSocketId(null);
       }
-    } catch (error) {
-      console.error("Logout error:", error);
     }
   };
 

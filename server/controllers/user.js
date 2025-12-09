@@ -94,7 +94,13 @@ export async function handleSignup(req, res) {
 export async function handleLogout(req, res) {
   return res
     .status(200)
-    .clearCookie("uid")
+    .clearCookie("uid", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 0,
+      path: "/",
+    })
     .json({ message: "Logout successful" });
 }
 
