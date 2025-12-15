@@ -2,7 +2,7 @@ import { getUser } from "../services/jwt.js";
 
 export const auth = async (req, res, next) => {
   const authHeader = req.headers?.authorization;
-  const tokenFromHeader = authHeader && authHeader.startWith("Bearer ")
+  const tokenFromHeader = authHeader && authHeader.startsWith("Bearer ")
     ? authHeader.split(" ")[1]
     : null;
 
