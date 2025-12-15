@@ -8,7 +8,7 @@ const secret = process.env.JWT_SECRET;
 
 export function setUser(user) {
   try {
-    return jwt.sign(user, secret);
+    return jwt.sign(user, secret, {expiresIn: "24h"});
   } catch (error) {
     console.error("Error signing JWT:", error);
     return null;

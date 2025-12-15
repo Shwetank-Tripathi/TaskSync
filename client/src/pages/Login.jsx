@@ -23,6 +23,7 @@ const Login = () => {
 
       if (res.status === 200) {
         const data = res.data;
+        localStorage.setItem("uid", data.uid);
         setUser(data.user);
         await new Promise(resolve => setTimeout(resolve, 100));
         navigate("/rooms");

@@ -1,7 +1,8 @@
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import { setUser } from "../services/jwt.js";
-import validator from "validator";
+
+const isProduction = process.env.NODE_ENV === "production";
 
 export async function handleGetUsers(req, res) {
   const users = await User.find();
@@ -41,13 +42,14 @@ export async function handleLogin(req, res) {
       .status(200)
       .cookie("uid", uid, {
         httpOnly: true,
-        secure: true,
-        sameSite: "none",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
         maxAge: 30 * 24 * 60 * 60 * 1000,
         path: "/",
       })
       .json({
         message: "Logged in successfully",
+        uid,
         isLoggedIn: true,
         user: userWithoutPassword,
       });
@@ -97,8 +99,8 @@ export async function handleLogout(req, res) {
     .status(200)
     .clearCookie("uid", {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 0,
       path: "/",
     })
